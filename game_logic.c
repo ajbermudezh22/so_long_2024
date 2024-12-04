@@ -3,18 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   game_logic.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albbermu <albbermu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albermud <albermud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:44:16 by albbermu          #+#    #+#             */
-/*   Updated: 2024/11/27 15:44:05 by albbermu         ###   ########.fr       */
+/*   Updated: 2024/11/27 20:08:44 by albermud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	initialize_game(t_game *game, t_texture texture)
+void init_game(t_game *game)
 {
-	game->collected = 0;
+    game->mlx = mlx_init();
+    if (!game->mlx)
+        exit(EXIT_FAILURE);
+    game->window = NULL;
+    game->map = NULL;
+    game->map_width = 0;
+    game->map_height = 0;
+    game->player_x = 0;
+    game->player_y = 0;
+    game->move_count = 0;
+    game->collectibles = 0;
+    game->collected = 0;
 }
 
-void	initiali
+void init_texture(t_texture *texture)
+{
+    texture->wall = NULL;
+    texture->floor = NULL;
+    texture->collectible = NULL;
+    texture->exit = NULL;
+    texture->player = NULL;
+}
