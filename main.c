@@ -6,7 +6,7 @@
 /*   By: albermud <albermud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 13:09:20 by albbermu          #+#    #+#             */
-/*   Updated: 2024/12/04 09:19:00 by albermud         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:51:34 by albermud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,26 @@
 
 void	create_window(t_game *game)
 {
-	game->mlx = mlx_init();
-	if (game->mlx == NULL)
-	{
-		ft_printf("Error\nFailed to initialize Minilibx\n");
-		exit(EXIT_FAILURE);
-	}
-	game->window = mlx_new_window(game->mlx, game->map_width * TILE_SIZE,
-		game->map_height * TILE_SIZE, "So Long Game");
-	if (game->window == NULL)
-	{
-		ft_printf("Error\nFailed to create window\n");
-		exit(EXIT_FAILURE);
-	}
+	ft_printf("Creating game window...\n");
+	game->window = mlx_new_window(game->mlx,
+			game->map_width * TILE_SIZE, game->map_height * TILE_SIZE,
+			"So Long Game");
+	if (!game->window)
+		map_error("Failed to create window");
+	ft_printf("Game window created successfully.\n");
 }
 
 int	main(int ac, char **av)
 {
-    t_game	game;
+	t_game	game;
 
-	if (ac == 1)
-		map_error("Please specify a map");
-	else if (ac > 2)
-		map_error("Too many arguments");
+	if (ac != 2)
+		map_error("Usage: ./so_long <map_file>");
 	init_game(&game);
-	init_texture(&game.textures);
 	parse_map(&game, av[1]);
 	create_window(&game);
 	load_textures(&game, &game.textures);
+	render_game(&game);
 	setup_hooks(&game);
 	mlx_loop(game.mlx);
 	return (0);

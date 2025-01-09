@@ -6,38 +6,48 @@
 /*   By: albermud <albermud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:43:41 by albbermu          #+#    #+#             */
-/*   Updated: 2024/12/04 09:24:55 by albermud         ###   ########.fr       */
+/*   Updated: 2025/01/07 09:49:47 by albermud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	map_error(char *s)
+void	load_textures(t_game *game, t_texture *textures)
 {
-	ft_printf("Error\n");
-	ft_printf("%s\n", s);
-	exit(1);
+	int	width;
+	int	height;
+
+	textures->wall = mlx_xpm_file_to_image(game->mlx, "assets/wall.xpm",
+			&width, &height);
+	if (!textures->wall)
+		map_error("Error loading texture: wall.xpm");
+	textures->floor = mlx_xpm_file_to_image(game->mlx, "assets/floor.xpm",
+			&width, &height);
+	if (!textures->floor)
+		map_error("Error loading texture: floor.xpm");
+	textures->collectible = mlx_xpm_file_to_image(game->mlx,
+			"assets/collectible.xpm", &width, &height);
+	if (!textures->collectible)
+		map_error("Error loading texture: collectible.xpm");
+	textures->exit = mlx_xpm_file_to_image(game->mlx, "assets/exit.xpm",
+			&width, &height);
+	if (!textures->exit)
+		map_error("Error loading texture: exit.xpm");
+	textures->player = mlx_xpm_file_to_image(game->mlx, "assets/player.xpm",
+			&width, &height);
+	if (!textures->player)
+		map_error("Error loading texture: player.xpm");
 }
 
-void load_textures(t_game *game, t_texture *textures)
+void	map_error(char *s)
 {
-    int width;
-    int height;
-
-    textures->wall = mlx_xpm_file_to_image(game->mlx, "assets/wall.xpm", &width, &height);
-    if (!textures->wall)
-        exit(EXIT_FAILURE);
-    textures->floor = mlx_xpm_file_to_image(game->mlx, "assets/floor.xpm", &width, &height);
-    textures->collectible = mlx_xpm_file_to_image(game->mlx, "assets/collectible.xpm", &width, &height);
-    textures->exit = mlx_xpm_file_to_image(game->mlx, "assets/exit.xpm", &width, &height);
-    textures->player = mlx_xpm_file_to_image(game->mlx, "assets/player.xpm", &width, &height);
-    if (!textures->floor || !textures->collectible || !textures->exit || !textures->player)
-        exit(EXIT_FAILURE);
+	ft_printf("Error\n%s\n", s);
+	exit(EXIT_FAILURE);
 }
 
 int	open_map_file(const char *filename)
 {
-	int fd;
+	int	fd;
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -48,14 +58,14 @@ int	open_map_file(const char *filename)
 	return (fd);
 }
 
-char **resize_map_mem(char **map, int line_count)
+char	**resize_map_mem(char **map, int line_count)
 {
 	char	**temp_map;
-	
+
 	temp_map = realloc(map, (line_count + 2) * sizeof(char *));
 	if (!temp_map)
 	{
-		perror("Error reallocating memory for map");
+		perror("Error reallocating memory");
 		free(map);
 		exit(EXIT_FAILURE);
 	}
